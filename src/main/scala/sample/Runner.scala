@@ -17,8 +17,6 @@ object Runner {
     } 
   }
   
-
-  
   def parityExample(): Unit = {
     val random = new Random()
     
@@ -60,7 +58,7 @@ object Runner {
       beta <- betas;
       gamma <- gammas;
       bias <- biases
-    ) yield {
+    ) {
       println( "hidden layers: %d, beta: %f gamma: %f, bias: %B" format(hiddenSize, beta, gamma, bias))
       Range(0, passCount).foreach{ pass => 
         println("pass: " + pass)
@@ -85,12 +83,7 @@ object Runner {
             println("success rate after %d iterations: %f" format (iteration, successRate))
           }
         }
-        
       }
     }
-    
   }
-  
-  
-  
 } 

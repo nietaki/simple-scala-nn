@@ -52,7 +52,7 @@ class FeedForwardNeuralNetwork( _neuronCounts: Seq[Int],
     val prevSize = ns.head
     val nextSize = ns.last
     
-    DenseMatrix.rand(nextSize, prevSize).map(x =>  2.0 * MAX_ABSOLUTE_WEIGHT_VALUE * x - 1.0) //random weights at the beginning
+    DenseMatrix.rand(nextSize, prevSize).map(x => 2.0 * MAX_ABSOLUTE_WEIGHT_VALUE * x - 1.0) //random weights at the beginning
   }
   
    /**
