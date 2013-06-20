@@ -7,8 +7,6 @@ import breeze.linalg._
 import breeze.numerics._
 import math._
 
-import helpers._
-
 class SampleSpec extends Specification {
  
   "sample" should {

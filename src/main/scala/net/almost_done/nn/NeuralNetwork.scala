@@ -14,7 +14,7 @@ trait NeuralNetwork {
   /**
    * the classification function to be implemented by subclasses
    */
-  def classifyImpl(input: Seq[Double]): Seq[Double]
+  protected def classifyImpl(input: Seq[Double]): Seq[Double]
   
   /**
    * wraps the `classifyImpl` method with bounds check.
@@ -52,7 +52,7 @@ trait NeuralNetwork {
    * the teaching function to be implemented by subclasses. If in the course of teaching you need to invoke the classification
    * method, use `teach` not `teachImpl` for added arguments checks
    */
-  def teachImpl(input: Seq[Double], desiredResult: Seq[Double]): Unit
+  protected def teachImpl(input: Seq[Double], desiredResult: Seq[Double]): Unit
   
   /*
    * Other interfaces in case it's easier to deal with Ints or Bools

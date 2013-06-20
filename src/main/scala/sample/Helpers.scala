@@ -1,6 +1,6 @@
 package sample
 
-object General {
+object Helpers {
 
   def assymetricalCoin(p: Double): Boolean = (math.random < p)
   

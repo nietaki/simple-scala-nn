@@ -2,9 +2,13 @@ package sample
 
 import scala.collection.immutable.Seq
 
+/**
+ * a helper class for generating sequences consisting of zeros and ones, generating all of them, generating
+ * random correct examples and verifying their parity
+ */
 class ZeroOneSequence(length: Int) {
   def nextRandom: Seq[Int] = {
-    Range(0, length) map { _ => if(General.assymetricalCoin(0.5)) 1 else 0}
+    Range(0, length) map { _ => if(Helpers.assymetricalCoin(0.5)) 1 else 0}
   }
   
   lazy val zeros: Seq[Int] = Range(0, length).map(_ => 0)

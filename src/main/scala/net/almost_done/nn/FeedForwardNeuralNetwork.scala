@@ -11,7 +11,7 @@ import breeze.linalg.DenseVector
  * layerCounts(layerCounts.length - 1) is the number of output neurons 
  * 
  * beta - steepness of the sigmoid function
- * gamma - scaling parameter of corrections
+ * @param gamma - scaling parameter of corrections - the "learning rate" parameter
  */
 class FeedForwardNeuralNetwork( _neuronCounts: Seq[Int], 
                                 _activationFunction: ActivationFunction, 
