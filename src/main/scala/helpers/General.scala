@@ -15,13 +15,4 @@ object General {
     print("execution time in seconds: ")
     println((System.currentTimeMillis - s) * 1.0 / 1000.0)
   }
-  
-  def sigmoid(beta: Double, h: Double) = {
-    1. / (1. + exp(-2. *  beta * h))
-  }
-  
-  def sigmoidPrim(beta: Double, h: Double) = {
-    val fx = sigmoid(beta, h)
-    2. * beta * fx * (1 - fx)
-  }
 }

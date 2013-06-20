@@ -1,4 +1,4 @@
-package nn
+package net.almost_done.nn
 
 import breeze.linalg._
 import scala.collection.mutable.Buffer
@@ -13,7 +13,7 @@ import System.out._
  * beta - steepness of the sigmoid function
  * gamma - scaling parameter of corrections
  */
-class NeuralNetwork(_neuronCounts: List[Int], val beta: Double, val gamma: Double, val useBias: Boolean = true) {
+class FeedForwardNeuralNetwork(_neuronCounts: List[Int], val beta: Double, val gamma: Double, val useBias: Boolean = true) {
   
   val BIAS_VALUE: Double = if(useBias) 1.0 else 0.0
   

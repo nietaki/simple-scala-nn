@@ -2,7 +2,7 @@ package helpers
 
 import java.io.File
 import General._
-import nn.NeuralNetwork
+import net.almost_done.nn.FeedForwardNeuralNetwork
 import System.out._
 import breeze.linalg._
 import scala.util.Random
@@ -27,7 +27,7 @@ object Runner {
   def beginnings() = {
 
     
-    val nnxor = new NeuralNetwork(List(2, 2, 1), 0.8, 1.0)
+    val nnxor = new FeedForwardNeuralNetwork(List(2, 2, 1), 0.8, 1.0)
 //    printOr()
     println("w: " + nnxor.w)
     println()
@@ -83,7 +83,7 @@ object Runner {
     val seqLen = 8
     
 //    val nnParity = new NeuralNetwork(List(seqLen, seqLen * seqLen, seqLen * seqLen, 1), 1.0, 1.0)
-    val nnParity = new NeuralNetwork(List(seqLen, 256, 1), 1.2, 0.20)
+    val nnParity = new FeedForwardNeuralNetwork(List(seqLen, 256, 1), 1.2, 0.20)
     val zos = new ZeroOneSequence(seqLen)
     
     var  curSuccessProcentage: Double = 0.0
@@ -158,7 +158,7 @@ object Runner {
       val f = new File(outDir + cummulativeName + ".csv")
       Range(0, passCount).inclusive.foreach{ pass => 
         println("pass: " + pass)
-        val nn = new NeuralNetwork(List(seqLen, hiddenSize, 1), beta, gamma, bias)
+        val nn = new FeedForwardNeuralNetwork(List(seqLen, hiddenSize, 1), beta, gamma, bias)
         val progress: Buffer[Double] = Buffer()
         
         Range(0, iterationCount).inclusive.foreach{ iteration =>
