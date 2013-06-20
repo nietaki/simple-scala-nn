@@ -13,8 +13,9 @@ import System.out._
  * beta - steepness of the sigmoid function
  * gamma - scaling parameter of corrections
  */
-class FeedForwardNeuralNetwork(_neuronCounts: List[Int], val beta: Double, val gamma: Double, val useBias: Boolean = true) {
+class FeedForwardNeuralNetwork(_neuronCounts: Seq[Int], val beta: Double, val gamma: Double,  val useBias: Boolean = true) {
   
+  val activationFunction = SigmoidFunction(beta)
   val BIAS_VALUE: Double = if(useBias) 1.0 else 0.0
   
   val layerCount = _neuronCounts.size
@@ -26,9 +27,9 @@ class FeedForwardNeuralNetwork(_neuronCounts: List[Int], val beta: Double, val g
    */
   val V: Buffer[DenseVector[Double]] = (neuronCounts map { layerCount => DenseVector.ones[Double](layerCount)}).toBuffer
   
-  //pobudzenia
+  //activations
   val h: Buffer[DenseVector[Double]] = (neuronCounts map { layerCount => DenseVector.ones[Double](layerCount)}).toBuffer
-  //odchylenia
+  //deviations
   val delta: Buffer[DenseVector[Double]] = (neuronCounts map { layerCount => DenseVector.ones[Double](layerCount)}).toBuffer
   
   
@@ -37,7 +38,7 @@ class FeedForwardNeuralNetwork(_neuronCounts: List[Int], val beta: Double, val g
     val prevSize = ns.head
     val nextSize = ns.last
     
-    DenseMatrix.rand(nextSize, prevSize).map(x => 1. - 2. * x ) //random weights at the beginning
+    DenseMatrix.rand(nextSize, prevSize).map(x => 1.0 - 2.0 * x ) //random weights at the beginning
   }
   
    /**
@@ -58,14 +59,14 @@ class FeedForwardNeuralNetwork(_neuronCounts: List[Int], val beta: Double, val g
     for(i <- Range(0, M)) {
       h(i+1) := w(i) * V(i)
       
-      V(i+1) := h(i+1).map(x => sigmoid(beta, x))
+      V(i+1) := h(i+1).map(activationFunction.apply)
       if(i+1 != M) {
         h(i+1)(0) = Double.MaxValue
         V(i+1)(0) = BIAS_VALUE
       }
     }
     
-    V(M).toArray.toSeq
+    V(M).toArray
   }
   
   def classifyInt(input: Seq[Int]): Seq[Int] = {
@@ -89,13 +90,13 @@ class FeedForwardNeuralNetwork(_neuronCounts: List[Int], val beta: Double, val g
     val eta: DenseVector[Double] = DenseVector(desiredResult : _*)
     
     //backpropagation - last layer
-    delta(M) := h(M).map(sigmoidPrim(beta, _)) :* (eta - V(M))
+    delta(M) := h(M).map(activationFunction.derivative(_)) :* (eta - V(M))
 //    println("h(M): " + h(M) + " sigmoid'(h(M)): " + h(M).map(sigmoidPrim(beta, _)) + " (eta, V(M)) " + eta  + V(M) + " delta(M) " + delta(M))
     
     //backpropagation - rest of the layers
     for(m <- Range(M-1, 1, -1).inclusive) {
-      delta(m) := h(m).map(sigmoidPrim(beta, _)) :* (w(m).t * delta(m+1)) 
-      delta(m)(0) = 0.
+      delta(m) := h(m).map(activationFunction.derivative(_)) :* (w(m).t * delta(m+1)) 
+      delta(m)(0) = 0.0
     }
     
     //adjust the w's

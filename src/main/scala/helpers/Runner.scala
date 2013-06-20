@@ -2,11 +2,14 @@ package helpers
 
 import java.io.File
 import General._
-import net.almost_done.nn.FeedForwardNeuralNetwork
+import net.almost_done.nn.NeuralNetwork
 import System.out._
 import breeze.linalg._
 import scala.util.Random
 import scala.collection.mutable.Buffer
+import net.almost_done.nn.SigmoidFunction
+import net.almost_done.nn.FeedForwardNeuralNetwork
+import net.almost_done.nn.FeedForwardNeuralNetwork
 
 
 object Runner {
@@ -175,7 +178,7 @@ object Runner {
             if(ZeroOneSequence.checkParity(seq) == nn.classifyInt(seq).head)
               successCount += 1
           }
-          var successRate: Double = 1. * successCount / zos.combinationCount
+          var successRate: Double = 1.0 * successCount / zos.combinationCount
           if(iteration % statsPeriod == 0) {
             println("success rate after %d iterations: %f" format (iteration, successRate))
             progress += successRate

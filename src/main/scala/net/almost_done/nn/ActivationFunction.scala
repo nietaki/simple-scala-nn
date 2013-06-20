@@ -5,7 +5,7 @@ package net.almost_done.nn
  * [[https://en.wikipedia.org/wiki/Sigmoid_function sigmoid]] function and the 
  * [[https://en.wikipedia.org/wiki/Tanh Hyperbolic tangent]] function.
  */
-trait ActivationFunction {
+protected trait ActivationFunction extends Function1[Double, Double] {
   
   /**
    * calculates the value of the function for a given argument
