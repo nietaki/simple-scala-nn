@@ -1,9 +1,9 @@
 package net.almost_done.nn
 
-import breeze.linalg._
 import scala.collection.mutable.Buffer
-import helpers.General._
-import System.out._
+
+import breeze.linalg.DenseMatrix
+import breeze.linalg.DenseVector
 
 /**
  * layerCounts describes the number of neurons in each layer
@@ -19,6 +19,7 @@ class FeedForwardNeuralNetwork( _neuronCounts: Seq[Int],
                                 val useBias: Boolean = true) extends NeuralNetwork {
   
   private val BIAS_VALUE: Double = if(useBias) 1.0 else 0.0
+  private val MAX_ABSOLUTE_WEIGHT_VALUE: Double = 1.0
   
   def activationFunction = _activationFunction
   
@@ -45,14 +46,13 @@ class FeedForwardNeuralNetwork( _neuronCounts: Seq[Int],
    */
   val delta: Buffer[DenseVector[Double]] = (neuronCounts map { layerCount => DenseVector.ones[Double](layerCount)}).toBuffer
   
-  
   private val _w = 
   for(ns <- neuronCounts.sliding(2)) yield { 
     assert(ns.length == 2)
     val prevSize = ns.head
     val nextSize = ns.last
     
-    DenseMatrix.rand(nextSize, prevSize).map(x => 1.0 - 2.0 * x ) //random weights at the beginning
+    DenseMatrix.rand(nextSize, prevSize).map(x =>  2.0 * MAX_ABSOLUTE_WEIGHT_VALUE * x - 1.0) //random weights at the beginning
   }
   
    /**
@@ -60,8 +60,7 @@ class FeedForwardNeuralNetwork( _neuronCounts: Seq[Int],
    * 
    * the sum (of influences) for i+1 can be calculated by w(i) * V(i) [matrix multiplication]
    */
-  val w = _w.toBuffer
-  
+  val w: Buffer[DenseMatrix[Double]] = _w.toBuffer
   
   def classifyImpl(input: Seq[Double]): Seq[Double] = {
     assert(input.length == V(0).length - 1)
@@ -72,7 +71,7 @@ class FeedForwardNeuralNetwork( _neuronCounts: Seq[Int],
     for(i <- Range(0, M)) {
       h(i+1) := w(i) * V(i)
       
-      V(i+1) := h(i+1).map(activationFunction.apply)
+      V(i+1) := h(i+1).map(activationFunction)
       if(i+1 != M) {
         h(i+1)(0) = Double.MaxValue //this is actually redundant but might be better for transparency reasons
         V(i+1)(0) = BIAS_VALUE
@@ -91,11 +90,11 @@ class FeedForwardNeuralNetwork( _neuronCounts: Seq[Int],
     val eta: DenseVector[Double] = DenseVector(desiredResult : _*)
     
     //backpropagation - last layer
-    delta(M) := h(M).map(activationFunction.derivative(_)) :* (eta - V(M))
+    delta(M) := h(M).map(activationFunction.derivative) :* (eta - V(M))
     
     //backpropagation - rest of the layers
     for(m <- Range(M-1, 1, -1).inclusive) {
-      delta(m) := h(m).map(activationFunction.derivative(_)) :* (w(m).t * delta(m+1)) 
+      delta(m) := h(m).map(activationFunction.derivative) :* (w(m).t * delta(m+1)) 
       delta(m)(0) = 0.0
     }
     

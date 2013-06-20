@@ -1,4 +1,4 @@
-package helpers
+package sample
 
 import scala.collection.immutable.Seq
 

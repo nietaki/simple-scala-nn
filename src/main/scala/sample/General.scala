@@ -1,9 +1,4 @@
-package helpers
-
-import breeze.linalg._
-import breeze.numerics._
-import math.exp
-
+package sample
 
 object General {
 
