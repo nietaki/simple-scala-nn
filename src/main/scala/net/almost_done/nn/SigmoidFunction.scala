@@ -19,4 +19,6 @@ protected case class SigmoidFunction(val beta: Double) extends ActivationFunctio
     val fx = apply(h)
     2.0 * beta * fx * (1.0 - fx)
   }
+  
+  def bounds = (0, 1)
 }

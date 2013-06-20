@@ -22,7 +22,7 @@ object Runner {
 //      pilotazowe()
 //      carefulTest()
 //      test()
-//      statsGen()
+      statsGen()
 //        drawBests()
     } 
   }
@@ -30,7 +30,7 @@ object Runner {
   def beginnings() = {
 
     
-    val nnxor = new FeedForwardNeuralNetwork(List(2, 2, 1), 0.8, 1.0)
+    val nnxor = new FeedForwardNeuralNetwork(List(2, 2, 1), new SigmoidFunction(0.8), 1.0)
 //    printOr()
     println("w: " + nnxor.w)
     println()
@@ -86,7 +86,7 @@ object Runner {
     val seqLen = 8
     
 //    val nnParity = new NeuralNetwork(List(seqLen, seqLen * seqLen, seqLen * seqLen, 1), 1.0, 1.0)
-    val nnParity = new FeedForwardNeuralNetwork(List(seqLen, 256, 1), 1.2, 0.20)
+    val nnParity = new FeedForwardNeuralNetwork(List(seqLen, 256, 1), new SigmoidFunction(1.2), 0.20)
     val zos = new ZeroOneSequence(seqLen)
     
     var  curSuccessProcentage: Double = 0.0
@@ -161,7 +161,7 @@ object Runner {
       val f = new File(outDir + cummulativeName + ".csv")
       Range(0, passCount).inclusive.foreach{ pass => 
         println("pass: " + pass)
-        val nn = new FeedForwardNeuralNetwork(List(seqLen, hiddenSize, 1), beta, gamma, bias)
+        val nn = new FeedForwardNeuralNetwork(List(seqLen, hiddenSize, 1), new SigmoidFunction(beta), gamma, bias)
         val progress: Buffer[Double] = Buffer()
         
         Range(0, iterationCount).inclusive.foreach{ iteration =>
