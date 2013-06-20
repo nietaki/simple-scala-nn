@@ -20,7 +20,6 @@ object Runner {
   def parityExample(): Unit = {
     val random = new Random()
     
-    
     val seqLen = 8
     val zos = new ZeroOneSequence(seqLen)
 
@@ -29,7 +28,6 @@ object Runner {
     
     //every how many iterations do you want to see the debug output?
     val statsPeriod = 10
-
     
     /*
      * you can include multiple configurations to see how they compare, just edit the lists

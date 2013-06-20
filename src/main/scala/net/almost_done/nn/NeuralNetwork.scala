@@ -7,7 +7,7 @@ package net.almost_done.nn
  */
 trait NeuralNetwork {
   
-  private val oob: String = "The `teach` and `classify` vectors' arguments should be within bounds of activationFunction's value"
+  private val oob: String = "The `teach` and `classify` vectors' arguments' values should be within bounds of activationFunction"
   
   def activationFunction: ActivationFunction
   
@@ -65,13 +65,27 @@ trait NeuralNetwork {
   }
 
    /**
-   * Int interface for `classify`
+   * Int interface for `teach`
    */
-  def teachInt(input: Seq[Int], desiredResult: Seq[Int]) = {
+  def teachInt(input: Seq[Int], desiredResult: Seq[Int]): Unit = {
     val i2 = input.map(_.toDouble)
     val d2 = desiredResult.map(_.toDouble)
     teach(i2, d2)
   }
   
-//  def 
+  /**
+   * Bool interface for `classify`
+   */
+  def classifyBool(input: Seq[Boolean]): Seq[Boolean] = {
+    classify(input.map(activationFunction.fromBoolean(_).doubleValue)).map(activationFunction.toBoolean(_))
+  }
+  
+   /**
+   * Bool interface for `teach`
+   */
+  def teachBool(input: Seq[Boolean], desiredResult: Seq[Boolean]): Unit = {
+    val i2 = input.map(activationFunction.fromBoolean(_).doubleValue)
+    val d2 = desiredResult.map(activationFunction.fromBoolean(_).doubleValue)
+    teach(i2, d2)
+  }
 }
