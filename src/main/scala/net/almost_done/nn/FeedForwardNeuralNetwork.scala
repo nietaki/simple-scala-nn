@@ -4,6 +4,7 @@ import scala.collection.mutable.Buffer
 
 import breeze.linalg.DenseMatrix
 import breeze.linalg.DenseVector
+import math.abs
 
 /**
  * layerCounts describes the number of neurons in each layer
@@ -45,6 +46,7 @@ class FeedForwardNeuralNetwork( _neuronCounts: Seq[Int],
    * errors 
    */
   val delta: Buffer[DenseVector[Double]] = (neuronCounts map { layerCount => DenseVector.ones[Double](layerCount)}).toBuffer
+  delta(0) *= 0.0
   
   private val _w = 
   for(ns <- neuronCounts.sliding(2)) yield { 
@@ -61,6 +63,10 @@ class FeedForwardNeuralNetwork( _neuronCounts: Seq[Int],
    * the sum (of influences) for i+1 can be calculated by w(i) * V(i) [matrix multiplication]
    */
   val w: Buffer[DenseMatrix[Double]] = _w.toBuffer
+  
+  def getMaxDelta(): Double = {
+    delta.tail.map(_.map(abs(_)).max).max
+  }
   
   def classifyImpl(input: Seq[Double]): Seq[Double] = {
     assert(input.length == V(0).length - 1)
@@ -81,7 +87,7 @@ class FeedForwardNeuralNetwork( _neuronCounts: Seq[Int],
     V(M).toArray
   }
   
-  def teachImpl(input: Seq[Double], desiredResult: Seq[Double]) = {
+  protected def trainImpl(input: Seq[Double], desiredResult: Seq[Double]) = {
     assert(input.length == V(0).length - 1)
     assert(desiredResult.length == V(M).length)
     

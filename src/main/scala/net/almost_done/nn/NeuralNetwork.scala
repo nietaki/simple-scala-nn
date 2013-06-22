@@ -31,6 +31,12 @@ trait NeuralNetwork {
     classifyImpl(input)
   }
   
+  /**
+   * @returns maximum correction made in the last training of the neural network. This can be used for termination criteria for training the 
+   * network. 
+   */
+  def getMaxDelta(): Double
+  
   
    /**
    * wraps the `teachImpl` method with bounds check.
@@ -41,18 +47,18 @@ trait NeuralNetwork {
    * @param desiredResult the sequence - vector of Doubles the input should be classified as. This parameter will also be verfied for being within the bounds
    * defined by `activationFunction` 
    */
-  def teach(input: Seq[Double], desiredResult: Seq[Double]): Unit = {
+  def train(input: Seq[Double], desiredResult: Seq[Double]): Unit = {
     assert(input.forall(activationFunction.withinBounds(_)), oob)
     assert(desiredResult.forall(activationFunction.withinBounds(_)), oob)
     
-    teachImpl(input, desiredResult)
+    trainImpl(input, desiredResult)
   }
   
   /**
    * the teaching function to be implemented by subclasses. If in the course of teaching you need to invoke the classification
    * method, use `teach` not `teachImpl` for added arguments checks
    */
-  protected def teachImpl(input: Seq[Double], desiredResult: Seq[Double]): Unit
+  protected def trainImpl(input: Seq[Double], desiredResult: Seq[Double]): Unit
   
   /*
    * Other interfaces in case it's easier to deal with Ints or Bools
@@ -67,10 +73,10 @@ trait NeuralNetwork {
    /**
    * Int interface for `teach`
    */
-  def teachInt(input: Seq[Int], desiredResult: Seq[Int]): Unit = {
+  def trainInt(input: Seq[Int], desiredResult: Seq[Int]): Unit = {
     val i2 = input.map(_.toDouble)
     val d2 = desiredResult.map(_.toDouble)
-    teach(i2, d2)
+    train(i2, d2)
   }
   
   /**
@@ -83,9 +89,9 @@ trait NeuralNetwork {
    /**
    * Bool interface for `teach`
    */
-  def teachBool(input: Seq[Boolean], desiredResult: Seq[Boolean]): Unit = {
+  def trainBool(input: Seq[Boolean], desiredResult: Seq[Boolean]): Unit = {
     val i2 = input.map(activationFunction.fromBoolean(_).doubleValue)
     val d2 = desiredResult.map(activationFunction.fromBoolean(_).doubleValue)
-    teach(i2, d2)
+    train(i2, d2)
   }
 }
