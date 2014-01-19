@@ -9,10 +9,10 @@ import math._
 
 class SampleSpec extends Specification {
  
-  "sample" should {
-    "work" in {
-      0.0 must be closeTo(0.0, 0.1)
-    }
-  }
+//  "sample" should {
+//    "work" in {
+//      0.0 must be closeTo(0.0, 0.1)
+//    }
+//  }
 
 }

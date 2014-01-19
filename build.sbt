@@ -3,7 +3,8 @@ name := "simple-scala-nn"
 version := "0.2"
 
 libraryDependencies  ++= Seq(
-            "org.scalanlp" %% "breeze-math" % "0.4-SNAPSHOT",
+            //"org.scalanlp" %% "breeze-math" % "0.4-SNAPSHOT",
+            "org.scalanlp" % "breeze_2.10" % "0.5.2",
             //"org.scalanlp" %% "breeze-learn" % "0.4-SNAPSHOT",
             //"org.scalanlp" %% "breeze-process" % "0.4-SNAPSHOT",
             //"org.scalanlp" %% "breeze-viz" % "0.4-SNAPSHOT",
@@ -13,10 +14,13 @@ libraryDependencies  ++= Seq(
 
 
 resolvers ++= Seq(
-            "Sonatype Snapshots" at "https://oss.sonatype.org/content/repositories/snapshots/"
+            //"Sonatype Snapshots" at "https://oss.sonatype.org/content/repositories/snapshots/"
+            "Sonatype Releases" at "https://oss.sonatype.org/content/repositories/releases/"
 )
 
 scalacOptions += "-deprecation"
 
-scalaVersion := "2.10.1"
+scalacOptions ++= Seq("-Xmax-classfile-name", "254")
+
+scalaVersion := "2.10.3"
 
